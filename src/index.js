@@ -1,22 +1,17 @@
-import {Component, View} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {bootstrap} from 'angular2/platform/browser';
-import {Ng2} from 'ng-2/ng-2';
-import {Demo} from 'demo/demo';
+import {Menu} from 'menu/menu';
 
 @Component({
-  selector: 'main'
-})
-
-@View({
-  directives: [Ng2, Demo],
+  selector: 'main',
+  directives: [Menu],
   template: `
-    <ng-2></ng-2>
-    <demo size="x"></demo>
+    <menu></menu>
   `
 })
 
-class Main {
+class App {
 
 }
 
-bootstrap(Main);
+bootstrap(App);

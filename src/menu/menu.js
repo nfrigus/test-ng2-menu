@@ -1,39 +1,69 @@
 import {Component, View, Input} from 'angular2/core';
 
+var menu = [{
+  title: "Menu item 1",
+  link: null,
+  items: [{
+    title: "SubMenu item 1",
+    link: null,
+    items: [{
+      title: "SubSubMenu item 1",
+      link: null,
+      items: [],
+    }, {
+      title: "SubSubMenu item 2",
+      link: null,
+      items: [],
+    }],
+  }],
+}, {
+  title: "Menu item 2",
+  link: null,
+  items: [],
+}, {
+  title: "Menu item 3",
+  link: null,
+  items: [{
+    title: "SubMenu item 3",
+    link: null,
+    items: [],
+  }],
+}];
+
 @Component({
-  selector: 'demo'
-})
-
-@View({
-  inputs: ['size'],
+  inputs: ['title', 'link', 'items'],
+  selector: 'menu',
   template: `
-    <div>
-      <em>I am the Demo #{{ now }}. Here's my list:</em>
-      <strong>dasfasdf</strong>
-      <ul>
-        <li *ngFor="#item of items">{{ item }}</li>
-      </ul>
-      <input #newItemNode>
-      <input [(ngModel)]="newItem">
-      <button (click)="(addItem(newItem))">Add</button>
-    </div>
+    <ul>
+      <li *ngFor="#item of items" (click)="onToggleSubmenu($event, item)" [class.open]="item.showSubmenu">
+        <a [attr.href]="link" [class.clickable]="hasItems(item)">{{ item.title }}</a>
+        <menu [items]="item.items"></menu>
+      </li>
+    </ul>
   `,
-  directives: Demo
+  directives: [Menu]
 })
 
-export class Demo {
+export class Menu {
   constructor() {
     Object.assign(this, {
-      now: Date.now(),
-      items: ['Milk', 'Soy', 'Happiness'],
-      newItem: '',
-      size: "none"
+      items: menu,
     });
 
-    console.info('Demo Component Mounted Successfully');
+    console.info('Menu Component Mounted Successfully');
   }
 
-  addItem(item) {
-    this.items.push(item);
+  hasItems (menu) {
+    return menu.items && menu.items.length;
+  }
+
+  onToggleSubmenu(event, item) {
+    event.stopPropagation();
+
+    if (!item.items.length) {
+      return;
+    }
+
+    item.showSubmenu = !item.showSubmenu;
   }
 }
